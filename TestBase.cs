@@ -66,7 +66,6 @@ namespace AddressBook
         {
             driver.FindElement(locator).Clear();
             driver.FindElement(locator).SendKeys(value);
-            //driver.FindElement(locator).Click();
         }
 
         public void FillTheDropdown(string name, string value)
@@ -88,7 +87,6 @@ namespace AddressBook
             }
 
         }
-
 
         protected internal void CreateContact(ContactData contact)
         {
@@ -197,8 +195,6 @@ namespace AddressBook
             FillTheField(By.Name("group_footer"), group.Footer);
             driver.FindElement(By.Name("update")).Click();
         }
-
-
 
         protected internal string DeleteLastCreatedGroup()
         {
