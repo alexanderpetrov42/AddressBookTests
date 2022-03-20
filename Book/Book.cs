@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+
 Console.OutputEncoding = System.Text.Encoding.UTF8;
 
 Book default_book = new Book();
@@ -17,7 +19,25 @@ default_children_book.Print();
 five_param_children_book.Print();
 two_param_children_book.Print();
 
-class Book
+List<Book> books = new List<Book>();
+books.Add(default_book);
+books.Add(four_param);
+books.Add(two_param);
+books.Add(default_children_book);
+books.Add(five_param_children_book);
+
+books.RemoveAt(2); //учитывая нулевой индекс, книгу на третьем месте удаляем на втором индексе
+books.Insert(2, two_param_children_book);
+Console.WriteLine(books.Count);
+books.Sort();
+Console.WriteLine("Выводим список всех книг: ");
+books.ForEach(b => b.Print());
+books.Reverse();
+Console.WriteLine("Выводим список всех книг: ");
+books.ForEach(b => b.Print());
+books.Clear();
+
+class Book : IComparable
 {
     private protected string author { get; set; }
     private protected string bookName { get; set; }
@@ -43,6 +63,11 @@ class Book
        Console.WriteLine(printString);
     }
 
+    public int CompareTo(object? o)
+    {
+        if (o is Book book) return bookName.CompareTo(book.bookName);
+        else throw new ArgumentException("Некорректное значение параметра");
+    }
 }
 
 class ChildrenBook : Book
