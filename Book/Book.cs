@@ -26,7 +26,7 @@ books.Add(two_param);
 books.Add(default_children_book);
 books.Add(five_param_children_book);
 
-books.RemoveAt(2); //учитывая нулевой индекс, книгу на третьем месте удаляем на втором индексе
+books.RemoveAt(2); //учитывая нулевой индекс, книгу с третьего места удаляем на втором индексе
 books.Insert(2, two_param_children_book);
 Console.WriteLine(books.Count);
 books.Sort();
