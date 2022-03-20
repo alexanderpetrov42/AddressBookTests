@@ -241,6 +241,7 @@ namespace AddressBook
 
         protected internal string GetLastCreatedContactId()
         {
+            OpenHomePage();
             List<int> ids = new List<int>();
             var allContactsInputs = driver.FindElements(By.XPath("//tr[@name=\"entry\"]/td/input"));
             foreach (IWebElement i in allContactsInputs)
