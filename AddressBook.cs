@@ -37,7 +37,11 @@ namespace AddressBook
         [Test]
         public void EditGroup()
         {
-            AddGroup();
+            if (!IsGroupPresented())
+            {
+                AddGroup();
+            }
+
             GroupData group = new GroupData("New Group_edited") { Header = "sds_edited", Footer = "dsfsd_edited" };
             EditLastCreatedGroup(group);
         }
@@ -45,14 +49,22 @@ namespace AddressBook
         [Test]
         public void DeleteGroup()
         {
-            AddGroup();
+            if (!IsGroupPresented())
+            {
+                AddGroup();
+            }
+
             AssertLastCreatedGroupDeleted(DeleteLastCreatedGroup());
         }
 
         [Test]
         public void EditContact()
         {
-            AddContact();
+            if (!IsContactPresented())
+            {
+                AddContact();
+            }
+
             ContactData contact = new ContactData { FirstName = "FirstName_edited", MiddleName = "MiddleName_edited", LastName = "LastName_edited", Nickname = "Nickname_edited", Company = "Company_edited", Title = "Title_edited", Address = "Address_edited", HomeTelephone = "HomeTelephone_edited", MobileTelephone = "MobileTelephone_edited", WorkTelephone = "WorkTelephone_edited", FaxTelephone = "FaxTelephone_edited", Email = "Email_edited", Email2 = "Email2_edited", Email3 = "Email3_edited", Homepage = "Homepage_edited", BirthdayDay = "22", BirthdayMonth = "July", BirthdayYear = "1990", AnniversaryDay = "1", AnniversaryMonth = "January", AnniversaryYear = "2039", SecondaryAddress = "SecondaryAddress_edited", SecondaryHome = "SecondaryHome_edited", SecondaryNotes = "SecondaryNotes_edited" };
             EditLastCreatedContact(contact);
             AssertContactValues(contact);
@@ -61,7 +73,11 @@ namespace AddressBook
         [Test]
         public void DeleteContact()
         {
-            AddContact();
+            if (!IsContactPresented())
+            {
+                AddContact();
+            }
+
             AssertLastContactDeleted(DeleteLastCreatedContact());
 
         }

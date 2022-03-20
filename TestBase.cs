@@ -38,7 +38,18 @@ namespace AddressBook
             driver.FindElement(By.Name("pass")).SendKeys(account.Password);
             driver.FindElement(By.CssSelector("input[type=\"submit\"]")).Click();
         }
-
+        public bool IsElementPresent(By by)
+        {
+            try
+            {
+                driver.FindElement(by);
+                return true;
+            }
+            catch(NoSuchElementException)
+            {
+                return false;
+            }
+        }
         private void OpenHomePage()
         {
             driver.Navigate().GoToUrl("http://localhost/addressbook/");
@@ -140,6 +151,10 @@ namespace AddressBook
             Assert.AreEqual(contact.SecondaryHome, GetValueByName("phone2"));
             Assert.AreEqual(contact.SecondaryNotes, GetValueByName("notes"));
         }
+        public bool IsGroupPresented()
+        {
+            return IsElementPresent(By.XPath("//span[@class=\"group\"]"));
+        }
 
         protected internal void CreateGroup(GroupData group)
         {
@@ -183,6 +198,8 @@ namespace AddressBook
             driver.FindElement(By.Name("update")).Click();
         }
 
+
+
         protected internal string DeleteLastCreatedGroup()
         {
             driver.FindElement(By.LinkText("groups")).Click();
@@ -210,6 +227,10 @@ namespace AddressBook
             driver.FindElement(By.XPath($"//span[@class=\"group\"]/input[@value=\"{last_group_value}\"]")).Click();
             return last_group_value;
         }
+        public bool IsContactPresented()
+        {
+            return IsElementPresent(By.XPath("//tr[@name=\"entry\"]"));
+        }
 
         protected internal string ClickEditOnLastCreatedContact()
         {
@@ -231,6 +252,7 @@ namespace AddressBook
 
         protected internal void EditLastCreatedContact(ContactData contact)
         {
+            ClickEditOnLastCreatedContact();
             FillTheField(By.Name("firstname"), contact.FirstName);
             FillTheField(By.Name("middlename"), contact.MiddleName);
             FillTheField(By.Name("lastname"), contact.LastName);
