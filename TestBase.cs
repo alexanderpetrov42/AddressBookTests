@@ -15,9 +15,55 @@ namespace AddressBook
 {
     public class TestBase
     {
+        protected WebDriverWait wait;
         protected internal IWebDriver driver;
+        private LoginPage loginPage;
+        private ContactPage contactPage;
+        private GroupPage groupPage;
         public IDictionary<string, object> vars { get; private set; }
         private IJavaScriptExecutor js;
+
+
+        #region Pages
+        public LoginPage LoginPage
+        {
+            get
+            {
+                if (loginPage == null)
+                {
+                    loginPage = new LoginPage();
+                }
+
+                return loginPage;
+            }
+        }
+
+        public ContactPage ContactPage
+        {
+            get
+            {
+                if (contactPage == null)
+                {
+                    contactPage = new ContactPage();
+                }
+
+                return contactPage;
+            }
+        }
+
+        public GroupPage GroupPage
+        {
+            get
+            {
+                if (groupPage == null)
+                {
+                    groupPage = new GroupPage();
+                }
+
+                return groupPage;
+            }
+        }
+        #endregion
 
         [SetUp]
         public void SetUp()
@@ -25,18 +71,46 @@ namespace AddressBook
             driver = new ChromeDriver();
             js = (IJavaScriptExecutor)driver;
             vars = new Dictionary<string, object>();
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1);
             OpenHomePage();
             AccountData account = new AccountData("admin", "secret");
             Login(account);
         }
 
+        public static Func<IWebDriver, IWebElement> Condition(By locator)
+        {
+            return (driver) =>
+            {
+                var element = driver.FindElements(locator).FirstOrDefault();
+                return element != null && element.Displayed && element.Enabled ? element : null;
+            };
+        }
+
+        public void Click(By locator)
+        {
+            new WebDriverWait(driver, TimeSpan.FromSeconds(15)).Until(Condition(locator)).Click();
+        }
+
+
+        public void WaitUntilVisible(By locator)
+        {
+            wait = new WebDriverWait(driver, new TimeSpan(0, 0, 20));
+            wait.Message = "Element with locator '" + locator + "' was not visible in 20 seconds";
+            wait.Until(driver => driver.FindElement(locator).Displayed);
+        }
+
+        public void WaitUntilClickable(By locator)
+        {
+            wait = new WebDriverWait(driver, new TimeSpan(0, 0, 20));
+            wait.Message = "Element with locator '" + locator + "' was not clickable in 20 seconds";
+            wait.Until(driver => driver.FindElement(locator).Enabled);
+        }
+
         private void Login(AccountData account)
         {
-            driver.FindElement(By.Name("user")).Clear();
-            driver.FindElement(By.Name("user")).SendKeys(account.User);
-            driver.FindElement(By.Name("pass")).Clear();
-            driver.FindElement(By.Name("pass")).SendKeys(account.Password);
-            driver.FindElement(By.CssSelector("input[type=\"submit\"]")).Click();
+            FillTheField(LoginPage.UserTextField, account.User);
+            FillTheField(LoginPage.PasswordTextField, account.Password);
+            Click(LoginPage.SubmitLoginButton);
         }
         public bool IsElementPresent(By by)
         {
@@ -90,34 +164,34 @@ namespace AddressBook
 
         protected internal void CreateContact(ContactData contact)
         {
-            driver.FindElement(By.LinkText("add new")).Click();
+            driver.FindElement(ContactPage.AddNewTab).Click();
 
-            FillTheField(By.Name("firstname"), contact.FirstName);
-            FillTheField(By.Name("middlename"), contact.MiddleName);
-            FillTheField(By.Name("lastname"), contact.LastName);
-            FillTheField(By.Name("nickname"), contact.Nickname);
-            FillTheField(By.Name("title"), contact.Title);
-            FillTheField(By.Name("company"), contact.Company);
-            FillTheField(By.Name("address"), contact.Address);
-            FillTheField(By.Name("home"), contact.HomeTelephone);
-            FillTheField(By.Name("mobile"), contact.MobileTelephone);
-            FillTheField(By.Name("work"), contact.WorkTelephone);
-            FillTheField(By.Name("fax"), contact.FaxTelephone);
-            FillTheField(By.Name("email"), contact.Email);
-            FillTheField(By.Name("email2"), contact.Email2);
-            FillTheField(By.Name("email3"), contact.Email3);
-            FillTheField(By.Name("homepage"), contact.Homepage);
+            FillTheField(ContactPage.FirstName, contact.FirstName);
+            FillTheField(ContactPage.MiddleName, contact.MiddleName);
+            FillTheField(ContactPage.LastName, contact.LastName);
+            FillTheField(ContactPage.Nickname, contact.Nickname);
+            FillTheField(ContactPage.Title, contact.Title);
+            FillTheField(ContactPage.Company, contact.Company);
+            FillTheField(ContactPage.Address, contact.Address);
+            FillTheField(ContactPage.Home, contact.HomeTelephone);
+            FillTheField(ContactPage.Mobile, contact.MobileTelephone);
+            FillTheField(ContactPage.Work, contact.WorkTelephone);
+            FillTheField(ContactPage.Fax, contact.FaxTelephone);
+            FillTheField(ContactPage.Email, contact.Email);
+            FillTheField(ContactPage.Email2, contact.Email2);
+            FillTheField(ContactPage.Email3, contact.Email3);
+            FillTheField(ContactPage.Homepage, contact.Homepage);
             FillTheDropdown("bday", contact.BirthdayDay);
             FillTheDropdown("bmonth", contact.BirthdayMonth);
-            FillTheField(By.Name("byear"), contact.BirthdayYear);
+            FillTheField(ContactPage.Byear, contact.BirthdayYear);
             FillTheDropdown("aday", contact.AnniversaryDay);
             FillTheDropdown("amonth", contact.AnniversaryMonth);
-            FillTheField(By.Name("ayear"), contact.AnniversaryYear);
-            FillTheField(By.Name("address2"), contact.SecondaryAddress);
-            FillTheField(By.Name("phone2"), contact.SecondaryHome);
-            FillTheField(By.Name("notes"), contact.SecondaryNotes);
+            FillTheField(ContactPage.Ayear, contact.AnniversaryYear);
+            FillTheField(ContactPage.Address2, contact.SecondaryAddress);
+            FillTheField(ContactPage.Phone2, contact.SecondaryHome);
+            FillTheField(ContactPage.Notes, contact.SecondaryNotes);
 
-            driver.FindElement(By.Name("submit")).Click();
+            driver.FindElement(ContactPage.Submit).Click();
         }
 
         protected internal void AssertContactValues(ContactData contact)
@@ -151,17 +225,17 @@ namespace AddressBook
         }
         public bool IsGroupPresented()
         {
-            return IsElementPresent(By.XPath("//span[@class=\"group\"]"));
+            return IsElementPresent(GroupPage.GroupElem);
         }
 
         protected internal void CreateGroup(GroupData group)
         {
-            driver.FindElement(By.LinkText("groups")).Click();
-            driver.FindElement(By.Name("new")).Click();
-            FillTheField(By.Name("group_name"), group.Name);
-            FillTheField(By.Name("group_header"), group.Header);
-            FillTheField(By.Name("group_footer"), group.Footer);;
-            driver.FindElement(By.Name("submit")).Click();
+            driver.FindElement(GroupPage.GroupsTab).Click();
+            driver.FindElement(GroupPage.New).Click();
+            FillTheField(GroupPage.GroupName, group.Name);
+            FillTheField(GroupPage.GroupHeader, group.Header);
+            FillTheField(GroupPage.GroupFooter, group.Footer);;
+            driver.FindElement(GroupPage.Submit).Click();
         }
 
         protected internal void AssertGroupCreated(GroupData group)
@@ -182,56 +256,56 @@ namespace AddressBook
 
         public void ClickEditOnLastCreatedGroup()
         {
-            driver.FindElement(By.LinkText("groups")).Click();
+            driver.FindElement(GroupPage.GroupsTab).Click();
             SelectLastCreatedGroup();
-            driver.FindElement(By.Name("edit")).Click();
+            driver.FindElement(GroupPage.Edit).Click();
         }
 
         protected internal void EditLastCreatedGroup(GroupData group)
         {
             ClickEditOnLastCreatedGroup();
-            FillTheField(By.Name("group_name"), group.Name);
-            FillTheField(By.Name("group_header"), group.Header);
-            FillTheField(By.Name("group_footer"), group.Footer);
-            driver.FindElement(By.Name("update")).Click();
+            FillTheField(GroupPage.GroupName, group.Name);
+            FillTheField(GroupPage.GroupHeader, group.Header);
+            FillTheField(GroupPage.GroupFooter, group.Footer);
+            driver.FindElement(GroupPage.Update).Click();
         }
 
         protected internal string DeleteLastCreatedGroup()
         {
-            driver.FindElement(By.LinkText("groups")).Click();
+            driver.FindElement(GroupPage.GroupsTab).Click();
             string lgv = SelectLastCreatedGroup();
-            driver.FindElement(By.Name("delete")).Click();
+            driver.FindElement(GroupPage.Delete).Click();
             return lgv;
         }
 
         protected internal void AssertLastCreatedGroupDeleted(string last_group_value)
         {
             OpenHomePage();
-            driver.FindElement(By.LinkText("groups")).Click();
-            Assert.IsTrue(driver.FindElements(By.XPath($"//span[@class=\"group\"]/input[@value=\"{last_group_value}\"]")).Count == 0);
+            driver.FindElement(GroupPage.GroupsTab).Click();
+            Assert.IsTrue(driver.FindElements(GroupPage.LastGroup(last_group_value)).Count == 0);
         }
 
         protected internal string SelectLastCreatedGroup()
         {
             List<int> values = new List<int>();
-            var allGroupsValues = driver.FindElements(By.XPath("//span[@class=\"group\"]/input"));
+            var allGroupsValues = driver.FindElements(GroupPage.AllGroupsValues);
             foreach (IWebElement i in allGroupsValues)
             {
                 values.Add(Int32.Parse(i.GetAttribute("value")));
             }
             string last_group_value = values.Max().ToString();
-            driver.FindElement(By.XPath($"//span[@class=\"group\"]/input[@value=\"{last_group_value}\"]")).Click();
+            driver.FindElement(GroupPage.LastGroup(last_group_value)).Click();
             return last_group_value;
         }
         public bool IsContactPresented()
         {
-            return IsElementPresent(By.XPath("//tr[@name=\"entry\"]"));
+            return IsElementPresent(ContactPage.ContactEntry);
         }
 
         protected internal string ClickEditOnLastCreatedContact()
         {
             string lcc_id = GetLastCreatedContactId();
-            driver.FindElement(By.XPath($"//tr[@name=\"entry\"]/td/a[@href=\"edit.php?id={lcc_id}\"]")).Click();
+            driver.FindElement(ContactPage.EditLastCreatedContact(lcc_id)).Click();
             return lcc_id;
         }
 
@@ -239,7 +313,7 @@ namespace AddressBook
         {
             OpenHomePage();
             List<int> ids = new List<int>();
-            var allContactsInputs = driver.FindElements(By.XPath("//tr[@name=\"entry\"]/td/input"));
+            var allContactsInputs = driver.FindElements(ContactPage.AllContactsInputs);
             foreach (IWebElement i in allContactsInputs)
             {
                 ids.Add(Int32.Parse(i.GetAttribute("id")));
@@ -250,30 +324,30 @@ namespace AddressBook
         protected internal void EditLastCreatedContact(ContactData contact)
         {
             ClickEditOnLastCreatedContact();
-            FillTheField(By.Name("firstname"), contact.FirstName);
-            FillTheField(By.Name("middlename"), contact.MiddleName);
-            FillTheField(By.Name("lastname"), contact.LastName);
-            FillTheField(By.Name("nickname"), contact.Nickname);
-            FillTheField(By.Name("title"), contact.Title);
-            FillTheField(By.Name("company"), contact.Company);
-            FillTheField(By.Name("address"), contact.Address);
-            FillTheField(By.Name("home"), contact.HomeTelephone);
-            FillTheField(By.Name("mobile"), contact.MobileTelephone);
-            FillTheField(By.Name("work"), contact.WorkTelephone);
-            FillTheField(By.Name("fax"), contact.FaxTelephone);
-            FillTheField(By.Name("email"), contact.Email);
-            FillTheField(By.Name("email2"), contact.Email2);
-            FillTheField(By.Name("email3"), contact.Email3);
-            FillTheField(By.Name("homepage"), contact.Homepage);
+            FillTheField(ContactPage.FirstName, contact.FirstName);
+            FillTheField(ContactPage.MiddleName, contact.MiddleName);
+            FillTheField(ContactPage.LastName, contact.LastName);
+            FillTheField(ContactPage.Nickname, contact.Nickname);
+            FillTheField(ContactPage.Title, contact.Title);
+            FillTheField(ContactPage.Company, contact.Company);
+            FillTheField(ContactPage.Address, contact.Address);
+            FillTheField(ContactPage.Home, contact.HomeTelephone);
+            FillTheField(ContactPage.Mobile, contact.MobileTelephone);
+            FillTheField(ContactPage.Work, contact.WorkTelephone);
+            FillTheField(ContactPage.Fax, contact.FaxTelephone);
+            FillTheField(ContactPage.Email, contact.Email);
+            FillTheField(ContactPage.Email2, contact.Email2);
+            FillTheField(ContactPage.Email3, contact.Email3);
+            FillTheField(ContactPage.Homepage, contact.Homepage);
             FillTheDropdown("bday", contact.BirthdayDay);
             FillTheDropdown("bmonth", contact.BirthdayMonth);
-            FillTheField(By.Name("byear"), contact.BirthdayYear);
+            FillTheField(ContactPage.Byear, contact.BirthdayYear);
             FillTheDropdown("aday", contact.AnniversaryDay);
             FillTheDropdown("amonth", contact.AnniversaryMonth);
-            FillTheField(By.Name("ayear"), contact.AnniversaryYear);
-            FillTheField(By.Name("address2"), contact.SecondaryAddress);
-            FillTheField(By.Name("phone2"), contact.SecondaryHome);
-            FillTheField(By.Name("notes"), contact.SecondaryNotes);
+            FillTheField(ContactPage.Ayear, contact.AnniversaryYear);
+            FillTheField(ContactPage.Address2, contact.SecondaryAddress);
+            FillTheField(ContactPage.Phone2, contact.SecondaryHome);
+            FillTheField(ContactPage.Notes, contact.SecondaryNotes);
 
             driver.FindElement(By.Name("update")).Click();
         }
@@ -282,14 +356,14 @@ namespace AddressBook
             OpenHomePage();
             string lcc_id = GetLastCreatedContactId();
             driver.FindElement(By.Id(lcc_id)).Click();
-            driver.FindElement(By.CssSelector("input[value=Delete]")).Click();
+            driver.FindElement(ContactPage.DeleteContact).Click();
             driver.SwitchTo().Alert().Accept();
-            Thread.Sleep(10000);
             return lcc_id;
         }
 
         protected internal void AssertLastContactDeleted(string contact)
         {
+            new WebDriverWait(driver, TimeSpan.FromSeconds(15)).Until(Condition(By.Id("search_count")));
             Assert.True(driver.FindElements(By.Id(contact)).Count == 0);
         }
 
