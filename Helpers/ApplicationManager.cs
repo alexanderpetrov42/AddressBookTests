@@ -10,6 +10,12 @@ namespace AddressBook
         protected internal IWebDriver driver;
         private string baseURL;
 
+        private NavigationHelper navigation;
+        private LoginHelper auth;
+        private GroupHelper group;
+        private ContactHelper contact;
+
+
         public ApplicationManager()
         {
             driver = new ChromeDriver();
@@ -18,20 +24,54 @@ namespace AddressBook
 
             baseURL = "http://localhost/addressbook/";
 
-            Navigation = new NavigationHelper(this, this.baseURL);
-            Auth = new LoginHelper(this);
-            Group = new GroupHelper(this);
-            Contact = new ContactHelper(this);
+            group = new GroupHelper(this);
+            contact = new ContactHelper(this);
+            auth = new LoginHelper(this);
+            navigation = new NavigationHelper(this, baseURL);
+
 
             Navigation.OpenHomePage();
             AccountData account = new AccountData("admin", "secret");
             Auth.Login(account);
         }
 
-        public NavigationHelper Navigation { get; }
-        public LoginHelper Auth { get; }
-        public GroupHelper Group { get; }
-        public ContactHelper Contact { get; }
+        public IWebDriver Driver
+        {
+            get
+            {
+                return driver;
+            }
+        }
+        public NavigationHelper Navigation
+        {
+            get
+            {
+                return navigation;
+            }
+        }
+
+        public LoginHelper Auth
+        {
+            get
+            {
+                return auth;
+            }
+        }
+        public GroupHelper Group
+        {
+            get
+            {
+                return group;
+            }
+        }
+        public ContactHelper Contact
+        {
+            get
+            {
+                return contact;
+            }
+        }
+
 
         public void Stop()
         {
