@@ -1,10 +1,12 @@
-﻿using NUnit.Framework;
+﻿
+using AddressBook.Helpers;
+using NUnit.Framework;
 
 namespace AddressBook
 {
 
     [TestFixture]
-    public class AddressBookTests : TestBase
+    public class AddressBookTests : AuthBase
     {
         [Test]
         public void AddContact()

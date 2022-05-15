@@ -8,8 +8,12 @@ namespace AddressBook
         [Test]
         public void LoginWithValidData()
         {
-            app.Auth.Logout();
-            AccountData account = new AccountData("admin", "secret");
+            if (app.Auth.IsLoggedIn())
+            {
+                app.Auth.Logout();
+            }
+
+            AccountData account = new AccountData(Settings.Login, Settings.Password);
             app.Auth.Login(account);
             Assert.True(app.Auth.IsLoggedIn(account.User));
             Assert.True(app.Auth.IsLoggedIn());
@@ -19,7 +23,10 @@ namespace AddressBook
         [Test]
         public void LoginWithInvalidData()
         {
-            app.Auth.Logout();
+            if (app.Auth.IsLoggedIn())
+            { 
+                app.Auth.Logout();
+            }
             AccountData account = new AccountData("invalid", "data");
             app.Auth.Login(account);
             Assert.False(app.Auth.IsLoggedIn(account.User));

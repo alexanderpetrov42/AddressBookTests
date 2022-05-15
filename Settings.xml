@@ -1,4 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Settings>
-<BaseURL>http://localhost/addressbook/</BaseURL>
+	<Settings>
+		<BaseURL>http://localhost/addressbook/</BaseURL>
+		<Login>admin</Login>
+		<Password>secret</Password>
 </Settings>

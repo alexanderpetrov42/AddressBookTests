@@ -35,6 +35,32 @@ namespace AddressBook
             }
         }
 
+        public static string Login
+        {
+            get
+            {
+                if (login == null)
+                {
+                    XmlNode node = document.DocumentElement.SelectSingleNode("Login");
+                    login = node.InnerText;
+                }
+                return login;
+            }
+        }
+
+        public static string Password
+        {
+            get
+            {
+                if (password == null)
+                {
+                    XmlNode node = document.DocumentElement.SelectSingleNode("Password");
+                    password = node.InnerText;
+                }
+                return password;
+            }
+        }
+
         public static string GetCurrentDirectory()
         {
             var codeBase = Assembly.GetExecutingAssembly().CodeBase;

@@ -39,11 +39,6 @@ namespace AddressBook
             contact = new ContactHelper(this);
             auth = new LoginHelper(this);
             navigation = new NavigationHelper(this, Settings.BaseURL);
-
-
-            this.Navigation.OpenHomePage();
-            AccountData account = new AccountData("admin", "secret");
-            Auth.Login(account);
         }
 
         ~ApplicationManager()
