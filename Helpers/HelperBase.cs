@@ -86,15 +86,15 @@ namespace AddressBook
 
         public void WaitUntilVisible(By locator)
         {
-            wait = new WebDriverWait(driver, new TimeSpan(0, 0, 20));
-            wait.Message = "Element with locator '" + locator + "' was not visible in 20 seconds";
+            wait = new WebDriverWait(driver, new TimeSpan(0, 0, 10));
+            wait.Message = "Element with locator '" + locator + "' was not visible in 10 seconds";
             wait.Until(driver => driver.FindElement(locator).Displayed);
         }
 
         public void WaitUntilClickable(By locator)
         {
-            wait = new WebDriverWait(driver, new TimeSpan(0, 0, 20));
-            wait.Message = "Element with locator '" + locator + "' was not clickable in 20 seconds";
+            wait = new WebDriverWait(driver, new TimeSpan(0, 0, 10));
+            wait.Message = "Element with locator '" + locator + "' was not clickable in 10 seconds";
             wait.Until(driver => driver.FindElement(locator).Enabled);
         }
 
@@ -119,8 +119,8 @@ namespace AddressBook
 
         public void FillTheDropdown(string name, string value)
         {
-            driver.FindElement(By.CssSelector($"select[name = \"{name}\"]")).Click();
-            driver.FindElement(By.XPath($"//select[@name = \"{name}\"]/option[text()=\"{value}\"]")).Click();
+            driver.FindElement(ContactPage.DropdownByName(name)).Click();
+            driver.FindElement(ContactPage.DropdownByNameAndValue(name, value)).Click();
         }
 
         public string GetValueByName(string name)
@@ -128,7 +128,7 @@ namespace AddressBook
             string[] dropdown = { "bday", "bmonth", "aday", "amonth" };
             if (dropdown.Any(name.Contains))
             {
-                return driver.FindElement(By.XPath($"//select[@name = \"{name}\"]/option[text()]")).Text;
+                return driver.FindElement(ContactPage.DropdownOptionText(name)).Text;
             }
             else
             {

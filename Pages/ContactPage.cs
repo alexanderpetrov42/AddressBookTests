@@ -38,6 +38,13 @@ namespace AddressBook
         public By AllContactsInputs { get { return By.XPath("//tr[@name=\"entry\"]/td/input"); } }
         public By DeleteContact { get { return By.CssSelector("input[value=Delete]"); } }
         public By ContactEntry { get { return By.XPath("//tr[@name=\"entry\"]"); } }
+
+        public By DropdownByName(string name) => By.CssSelector($"select[name = \"{name}\"]");
+
+        public By DropdownByNameAndValue(string name, string value) => By.XPath($"//select[@name = \"{name}\"]/option[text()=\"{value}\"]");
+
+        public By DropdownOptionText(string name) => By.XPath($"//select[@name = \"{name}\"]/option[text()]");
+
         public By EditLastCreatedContact(string lcc_id) => By.XPath($"//tr[@name=\"entry\"]/td/a[@href=\"edit.php?id={lcc_id}\"]");
     }
 }
