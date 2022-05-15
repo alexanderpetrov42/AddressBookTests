@@ -13,6 +13,10 @@ namespace AddressBook
 
         public By PasswordTextField { get { return By.Name("pass"); } }
 
-        public By SubmitLoginButton { get { return By.CssSelector("input[type=\"submit\"]"); } }
+        public By SubmitLoginButton { get { return By.XPath("//input[@type=\"submit\"][@value=\"Login\"]"); } }
+
+        public By LogoutButton { get { return By.XPath("//form[@name=\"logout\"]//a[text()=\"Logout\"]"); } }
+
+        public By LoggedInUser(string user) => By.XPath($"//form[@name=\"logout\"]//b[text()=\"({user})\"]");
     }
 }

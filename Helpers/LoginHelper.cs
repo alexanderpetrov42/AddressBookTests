@@ -15,9 +15,32 @@ namespace AddressBook
 
         protected internal void Login(AccountData account)
         {
+            if (IsLoggedIn())
+            {
+                if (IsLoggedIn(account.User))
+                {
+                    return;
+                }
+                Logout();
+            }
             FillTheField(LoginPage.UserTextField, account.User);
             FillTheField(LoginPage.PasswordTextField, account.Password);
             Click(LoginPage.SubmitLoginButton);
+        }
+
+        public bool IsLoggedIn()
+        {
+            return IsElementPresent(LoginPage.LogoutButton);
+        }
+
+        public bool IsLoggedIn(string username)
+        {
+            return IsElementPresent(LoginPage.LoggedInUser(username));
+        }
+
+        public void Logout()
+        {
+            Click(LoginPage.LogoutButton);
         }
 
         public LoginHelper(ApplicationManager manager):base(manager)

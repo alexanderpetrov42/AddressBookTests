@@ -21,7 +21,6 @@ namespace AddressBook
         public void OpenHomePage()
         {
             driver.Navigate().GoToUrl(baseURL);
-            driver.Manage().Window.Size = new System.Drawing.Size(1024, 728);
         }
     }
 }

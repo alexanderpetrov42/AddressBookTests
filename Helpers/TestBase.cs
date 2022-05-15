@@ -52,16 +52,10 @@ namespace AddressBook
         #endregion
 
         [SetUp]
-        public void SetUp()
+        public void SetUpApplicationManager()
         {
-            app = new ApplicationManager();
+            app = ApplicationManager.GetInstance();
+            app.Navigation.OpenHomePage();
         }
-
-        [TearDown]
-        protected void TearDown()
-        {
-            app.Stop();
-        }
-
     }
 }

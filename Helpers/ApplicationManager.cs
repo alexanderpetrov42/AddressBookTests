@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 
@@ -15,24 +16,39 @@ namespace AddressBook
         private GroupHelper group;
         private ContactHelper contact;
 
+        private static ThreadLocal<ApplicationManager> app = new ThreadLocal<ApplicationManager>();
 
-        public ApplicationManager()
+        public static ApplicationManager GetInstance()
+        {
+            if (!app.IsValueCreated)
+            { 
+                ApplicationManager newInstance = new ApplicationManager();
+                newInstance.Navigation.OpenHomePage();
+                app.Value = newInstance;
+            }
+            return app.Value;
+        }
+
+        private ApplicationManager()
         {
             driver = new ChromeDriver();
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1);
             driver.Manage().Window.Maximize();
 
-            baseURL = "http://localhost/addressbook/";
-
             group = new GroupHelper(this);
             contact = new ContactHelper(this);
             auth = new LoginHelper(this);
-            navigation = new NavigationHelper(this, baseURL);
+            navigation = new NavigationHelper(this, Settings.BaseURL);
 
 
-            Navigation.OpenHomePage();
+            this.Navigation.OpenHomePage();
             AccountData account = new AccountData("admin", "secret");
             Auth.Login(account);
+        }
+
+        ~ApplicationManager()
+        {
+            Stop();
         }
 
         public IWebDriver Driver
