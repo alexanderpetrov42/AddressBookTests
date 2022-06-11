@@ -43,7 +43,7 @@ namespace AddressBook
 
         ~ApplicationManager()
         {
-            Stop();
+            driver.Quit();
         }
 
         public IWebDriver Driver

@@ -1,6 +1,8 @@
-﻿
-using AddressBook.Helpers;
+﻿using AddressBook.Helpers;
 using NUnit.Framework;
+using System.Collections.Generic;
+using System.IO;
+using System.Xml.Serialization;
 
 namespace AddressBook
 {
@@ -8,64 +10,71 @@ namespace AddressBook
     [TestFixture]
     public class AddressBookTests : AuthBase
     {
-        [Test]
-        public void AddContact()
+        public static IEnumerable<GroupData> GroupDataFromXmlFile()
         {
-            ContactData contact = new ContactData { FirstName = "FirstName", MiddleName = "MiddleName", LastName = "LastName", Nickname = "Nickname", Company = "Company", Title = "Title", Address = "Address", HomeTelephone = "HomeTelephone", MobileTelephone = "MobileTelephone", WorkTelephone = "WorkTelephone", FaxTelephone = "FaxTelephone", Email = "Email", Email2 = "Email2", Email3 = "Email3", Homepage = "Homepage", BirthdayDay = "21", BirthdayMonth = "January", BirthdayYear = "1989", AnniversaryDay = "1", AnniversaryMonth = "January", AnniversaryYear = "2029", SecondaryAddress = "SecondaryAddress", SecondaryHome = "SecondaryHome", SecondaryNotes = "SecondaryNotes" };
+            return (List<GroupData>)new XmlSerializer(typeof(List<GroupData>))
+                .Deserialize(new StreamReader(@"groups.xml"));
+        }
+
+        public static IEnumerable<ContactData> ContactDataFromXmlFile()
+        {
+            return (List<ContactData>)new XmlSerializer(typeof(List<ContactData>))
+                .Deserialize(new StreamReader(@"contacts.xml"));
+        }
+
+        [Test, TestCaseSource("ContactDataFromXmlFile")]
+        public void AddContact(ContactData contact)
+        {
             app.Contact.CreateContact(contact);
             app.Contact.AssertContactValues(contact);
         }
 
-        [Test]
-        public void AddGroup()
+        [Test, TestCaseSource("GroupDataFromXmlFile")]
+        public void AddGroup(GroupData group)
         {
-            GroupData group = new GroupData("New Group") { Header = "sds", Footer = "dsfsd" };
             app.Group.CreateGroup(group);
             app.Group.AssertGroupCreated(group);
         }
 
-        [Test]
-        public void EditGroup()
+        [Test, TestCaseSource("GroupDataFromXmlFile")]
+        public void EditGroup(GroupData group)
         {
             if (!app.Group.IsGroupPresented())
             {
-                AddGroup();
+                AddGroup(group);
             }
-
-            GroupData group = new GroupData("New Group_edited") { Header = "sds_edited", Footer = "dsfsd_edited" };
             app.Group.EditLastCreatedGroup(group);
         }
 
-        [Test]
-        public void DeleteGroup()
+        [Test, TestCaseSource("GroupDataFromXmlFile")]
+        public void DeleteGroup(GroupData group)
         {
             if (!app.Group.IsGroupPresented())
             {
-                AddGroup();
+                AddGroup(group);
             }
 
             app.Group.AssertLastCreatedGroupDeleted(app.Group.DeleteLastCreatedGroup());
         }
 
-        [Test]
-        public void EditContact()
+        [Test, TestCaseSource("ContactDataFromXmlFile")]
+        public void EditContact(ContactData contact)
         {
             if (!app.Contact.IsContactPresented())
             {
-                AddContact();
+                AddContact(contact);
             }
 
-            ContactData contact = new ContactData { FirstName = "FirstName_edited", MiddleName = "MiddleName_edited", LastName = "LastName_edited", Nickname = "Nickname_edited", Company = "Company_edited", Title = "Title_edited", Address = "Address_edited", HomeTelephone = "HomeTelephone_edited", MobileTelephone = "MobileTelephone_edited", WorkTelephone = "WorkTelephone_edited", FaxTelephone = "FaxTelephone_edited", Email = "Email_edited", Email2 = "Email2_edited", Email3 = "Email3_edited", Homepage = "Homepage_edited", BirthdayDay = "22", BirthdayMonth = "July", BirthdayYear = "1990", AnniversaryDay = "1", AnniversaryMonth = "January", AnniversaryYear = "2039", SecondaryAddress = "SecondaryAddress_edited", SecondaryHome = "SecondaryHome_edited", SecondaryNotes = "SecondaryNotes_edited" };
             app.Contact.EditLastCreatedContact(contact);
             app.Contact.AssertContactValues(contact);
         }
 
-        [Test]
-        public void DeleteContact()
+        [Test, TestCaseSource("ContactDataFromXmlFile")]
+        public void DeleteContact(ContactData contact)
         {
             if (!app.Contact.IsContactPresented())
             {
-                AddContact();
+                AddContact(contact);
             }
 
             app.Contact.AssertLastContactDeleted(app.Contact.DeleteLastCreatedContact());

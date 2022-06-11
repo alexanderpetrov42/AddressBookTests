@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfGroupData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <GroupData>
+    <Name>ITS30ORBGJ</Name>
+    <Header>J8XUW4VE2F3J3EUCH04I</Header>
+    <Footer>J7Y9XUT66QNUKGTSJSDJ</Footer>
+  </GroupData>
+  <GroupData>
+    <Name>1E667451ZM</Name>
+    <Header>H1YJDPZGPMZLX0DEJEMD</Header>
+    <Footer>A6W9V2JH4N4YHIG47EYQ</Footer>
+  </GroupData>
+  <GroupData>
+    <Name>N3N84UTNPS</Name>
+    <Header>6EE3VO72SR25J1VLW6YQ</Header>
+    <Footer>8KGVTPW0J05QX8Y8AQDC</Footer>
+  </GroupData>
+</ArrayOfGroupData>

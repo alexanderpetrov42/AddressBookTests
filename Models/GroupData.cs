@@ -13,6 +13,10 @@ namespace AddressBook
             Name = name;
         }
 
+        public GroupData()
+        {
+        }
+
         public string Name { get; set; }
 
         public string Header { get; set; }
