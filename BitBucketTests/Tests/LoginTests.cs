@@ -3,7 +3,7 @@
 namespace BitBucketTests
 {
     [TestFixture]
-    public class LoginTests : TestBase
+    public class BitBucketLoginTests : TestBase
     {
         [Test]
         public void LoginWithValidDataBitbucket()
