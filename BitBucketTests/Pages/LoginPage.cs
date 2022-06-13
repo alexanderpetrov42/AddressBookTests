@@ -16,9 +16,6 @@ namespace BitBucketTests
         public By ProfileButton { get { return By.XPath("//button[@data-testid=\"profile-button\"]"); } }
         public By LogoutButton { get { return By.XPath("//span[text()=\"Log out\"]"); } }
 
-
-
-
-        public By LoggedInUser(string user) => By.XPath($"//form[@name=\"logout\"]//b[text()=\"({user})\"]");
+        public By LoggedInUser(string user) => By.XPath($"//div[@Class=\"css-1xhj18k erjypc2\"]/div/small[text()=\"{user}\"]");
     }
 }

@@ -32,11 +32,19 @@ namespace BitBucketTests
 
         public bool IsLoggedIn(string username)
         {
-            return IsElementPresent(LoginPage.LoggedInUser(username));
+            try
+            {
+                Click(LoginPage.ProfileButton);
+                return IsElementPresent(LoginPage.LoggedInUser(username));
+            }
+            catch {
+                return false;
+            }
         }
 
         public void Logout()
         {
+            WaitUntilClickable(LoginPage.ProfileButton);
             Click(LoginPage.ProfileButton);
             Click(LoginPage.LogoutButton);
         }

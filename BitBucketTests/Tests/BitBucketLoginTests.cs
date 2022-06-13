@@ -15,7 +15,7 @@ namespace BitBucketTests
 
             AccountData account = new AccountData(Settings.Login, Settings.Password);
             app.Auth.Login(account);
-            //Assert.True(app.Auth.IsLoggedIn(account.User));
+            Assert.True(app.Auth.IsLoggedIn(account.User));
             Assert.True(app.Auth.IsLoggedIn());
 
         }
@@ -29,7 +29,7 @@ namespace BitBucketTests
             }
             AccountData account = new AccountData("invalid@data.data", "invaliddata");
             app.Auth.Login(account);
-            //Assert.False(app.Auth.IsLoggedIn(account.User));
+            Assert.False(app.Auth.IsLoggedIn(account.User));
             Assert.False(app.Auth.IsLoggedIn());
         }
 
@@ -46,8 +46,8 @@ namespace BitBucketTests
             app.Auth.Login(account);
             app.Auth.Logout();
 
-            //Assert.True(app.Auth.IsLoggedIn(account.User));
             Assert.False(app.Auth.IsLoggedIn());
+            Assert.False(app.Auth.IsLoggedIn(account.User));
         }
     }
 }
