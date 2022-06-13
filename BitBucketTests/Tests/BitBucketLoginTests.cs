@@ -24,12 +24,29 @@ namespace BitBucketTests
         public void LoginWithInvalidDataBitbucket()
         {
             if (app.Auth.IsLoggedIn())
-            { 
+            {
                 app.Auth.Logout();
             }
             AccountData account = new AccountData("invalid@data.data", "invaliddata");
             app.Auth.Login(account);
             //Assert.False(app.Auth.IsLoggedIn(account.User));
+            Assert.False(app.Auth.IsLoggedIn());
+        }
+
+        [Test]
+        public void LogoutBitbucket()
+        {
+
+            if (app.Auth.IsLoggedIn())
+            {
+                app.Auth.Logout();
+            }
+
+            AccountData account = new AccountData(Settings.Login, Settings.Password);
+            app.Auth.Login(account);
+            app.Auth.Logout();
+
+            //Assert.True(app.Auth.IsLoggedIn(account.User));
             Assert.False(app.Auth.IsLoggedIn());
         }
     }

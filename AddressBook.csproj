@@ -8,12 +8,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="BitBucketTests\**" />
     <Compile Remove="Book\**" />
     <Compile Remove="FizzBuzz\**" />
     <Compile Remove="UpsideDown\**" />
+    <EmbeddedResource Remove="BitBucketTests\**" />
     <EmbeddedResource Remove="Book\**" />
     <EmbeddedResource Remove="FizzBuzz\**" />
     <EmbeddedResource Remove="UpsideDown\**" />
+    <None Remove="BitBucketTests\**" />
     <None Remove="Book\**" />
     <None Remove="FizzBuzz\**" />
     <None Remove="UpsideDown\**" />

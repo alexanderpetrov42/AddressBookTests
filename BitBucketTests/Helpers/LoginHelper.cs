@@ -37,6 +37,7 @@ namespace BitBucketTests
 
         public void Logout()
         {
+            Click(LoginPage.ProfileButton);
             Click(LoginPage.LogoutButton);
         }
 
