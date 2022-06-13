@@ -1,6 +1,8 @@
 ﻿using AddressBook.Helpers;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Xml.Serialization;
 
@@ -97,13 +99,26 @@ namespace AddressBook
         [Test, TestCaseSource("ContactDataFromXmlFile")]
         public void EditContact(ContactData contact)
         {
+            app.Navigation.OpenHomePage();
             if (!app.Contact.IsContactPresented())
             {
                 AddContact(contact);
             }
 
-            app.Contact.EditLastCreatedContact(contact);
-            app.Contact.AssertContactValues(contact);
+            List<ContactData> oldContacts = app.Contact.GetContactList();
+            oldContacts.Sort();
+            DateTime edit_bdate = app.Contact.GenerateRandomDay();
+            DateTime edit_adate = app.Contact.GenerateRandomDay();
+            ContactData edit_contact = new ContactData { FirstName = contact.FirstName+"_edited", MiddleName = contact.MiddleName + "_edited", LastName = contact.LastName + "_edited", Nickname = contact.Nickname+ "_edited", Company = contact.Company+ "_edited", Title = contact.Title+"_edited", Address = contact.Address + "_edited", HomeTelephone = contact.HomeTelephone+"_edited", MobileTelephone = contact.MobileTelephone + "_edited", WorkTelephone = contact.WorkTelephone + "_edited", FaxTelephone = contact.FaxTelephone + "_edited", Email = contact.Email + "_edited", Email2 = contact.Email2 + "_edited", Email3 = contact.Email3 + "_edited", Homepage = contact.Homepage + "_edited", BirthdayDay = edit_bdate.Day.ToString(), BirthdayMonth = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(edit_bdate.Month), BirthdayYear = edit_bdate.Year.ToString(), AnniversaryDay = edit_adate.Day.ToString(), AnniversaryMonth = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(edit_adate.Month), AnniversaryYear = edit_adate.Year.ToString(), SecondaryAddress = contact.SecondaryAddress + "_edited", SecondaryHome = contact.SecondaryHome + "_edited", SecondaryNotes = contact.SecondaryNotes + "_edited" };
+            edit_contact.Id = oldContacts[oldContacts.Count - 1].Id;
+
+            app.Contact.EditLastCreatedContact(edit_contact);
+
+            List<ContactData> newContacts = app.Contact.GetContactList();
+            newContacts.Sort();
+
+            Assert.AreEqual(edit_contact, newContacts[newContacts.Count - 1]);
+            app.Contact.AssertContactValues(edit_contact);
         }
 
         [Test, TestCaseSource("ContactDataFromXmlFile")]

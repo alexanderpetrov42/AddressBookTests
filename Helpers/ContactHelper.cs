@@ -148,6 +148,8 @@ namespace AddressBook
 
         public List<ContactData> GetContactList()
         {
+            manager.Navigation.OpenHomePage();
+
             List<ContactData> contacts = new List<ContactData>();
             ICollection<IWebElement> elements = driver.FindElements(By.XPath("//tr[@name=\"entry\"]"));
 
@@ -162,6 +164,14 @@ namespace AddressBook
                 });
             }
             return contacts;
+        }
+
+        public DateTime GenerateRandomDay()
+        {
+            Random rnd = new Random();
+            DateTime start = new DateTime(1920, 1, 1);
+            int range = (DateTime.Today - start).Days;
+            return start.AddDays(rnd.Next(range));
         }
     }
 }
