@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FizzBuzz", "FizzBuzz\FizzBu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UpsideDown", "UpsideDown\ConsoleApp1\UpsideDown.csproj", "{6CBDB274-938B-4766-B18E-BCBBA33EB17D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Generator", "..\Generator\Generator.csproj", "{88B28945-7254-410D-8750-9AADC5375AAD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generator", "..\Generator\Generator.csproj", "{88B28945-7254-410D-8750-9AADC5375AAD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitBucketTests", "BitBucketTests\BitBucketTests.csproj", "{74E688D9-C6B8-4B84-B90D-7FF52D796C8E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{88B28945-7254-410D-8750-9AADC5375AAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88B28945-7254-410D-8750-9AADC5375AAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88B28945-7254-410D-8750-9AADC5375AAD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74E688D9-C6B8-4B84-B90D-7FF52D796C8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74E688D9-C6B8-4B84-B90D-7FF52D796C8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74E688D9-C6B8-4B84-B90D-7FF52D796C8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74E688D9-C6B8-4B84-B90D-7FF52D796C8E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
