@@ -88,12 +88,23 @@ namespace AddressBook
         [Test, TestCaseSource("GroupDataFromXmlFile")]
         public void DeleteGroup(GroupData group)
         {
+            app.Navigation.OpenGroupsPage();
+
             if (!app.Group.IsGroupPresented())
             {
                 AddGroup(group);
             }
 
-            app.Group.AssertLastCreatedGroupDeleted(app.Group.DeleteLastCreatedGroup());
+            List<GroupData> oldGroups = app.Group.GetGroupList();
+            oldGroups.Sort();
+            string lastGroupValue = app.Group.DeleteLastCreatedGroup();
+
+            app.Group.AssertLastCreatedGroupDeleted(lastGroupValue);
+            int lgvIndex = oldGroups.FindIndex(p => p.Id == Convert.ToInt32(lastGroupValue));
+            List<GroupData> newGroups = app.Group.GetGroupList();
+            newGroups.Sort();
+            oldGroups.RemoveAt(lgvIndex);
+            Assert.AreEqual(oldGroups, newGroups);
         }
 
         [Test, TestCaseSource("ContactDataFromXmlFile")]
@@ -124,12 +135,23 @@ namespace AddressBook
         [Test, TestCaseSource("ContactDataFromXmlFile")]
         public void DeleteContact(ContactData contact)
         {
+            app.Navigation.OpenHomePage();
+
             if (!app.Contact.IsContactPresented())
             {
                 AddContact(contact);
             }
 
-            app.Contact.AssertLastContactDeleted(app.Contact.DeleteLastCreatedContact());
+            List<ContactData> oldContacts = app.Contact.GetContactList();
+            oldContacts.Sort();
+            string lcc_id = app.Contact.DeleteLastCreatedContact();
+
+            app.Contact.AssertLastContactDeleted(lcc_id);
+            int lccIndex = oldContacts.FindIndex(p => p.Id == Convert.ToInt32(lcc_id));
+            List<ContactData> newContacts = app.Contact.GetContactList();
+            newContacts.Sort();
+            oldContacts.RemoveAt(lccIndex);
+            Assert.AreEqual(newContacts, oldContacts);
 
         }
     }
