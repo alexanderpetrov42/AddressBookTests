@@ -22,5 +22,10 @@ namespace AddressBook
         {
             driver.Navigate().GoToUrl(baseURL);
         }
+
+        public void OpenGroupsPage()
+        {
+            Click(GroupPage.GroupsTab); 
+        }
     }
 }

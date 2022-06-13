@@ -136,5 +136,16 @@ namespace AddressBook
             }
 
         }
+
+        public int GetGroupCount()
+        {
+            return driver.FindElements(By.CssSelector("span.group")).Count;
+        }
+
+        public int GetContactCount()
+        {
+            return driver.FindElements(By.XPath("//tr[@name=\"entry\"]")).Count;
+        }
+      
     }
 }

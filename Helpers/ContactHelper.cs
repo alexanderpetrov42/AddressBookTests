@@ -145,5 +145,23 @@ namespace AddressBook
             Assert.AreEqual(contact.SecondaryHome, GetValueByName("phone2"));
             Assert.AreEqual(contact.SecondaryNotes, GetValueByName("notes"));
         }
+
+        public List<ContactData> GetContactList()
+        {
+            List<ContactData> contacts = new List<ContactData>();
+            ICollection<IWebElement> elements = driver.FindElements(By.XPath("//tr[@name=\"entry\"]"));
+
+            foreach (IWebElement element in elements)
+            {
+                contacts.Add(new ContactData()
+                {
+                    Id = Int32.Parse(element.FindElement(By.TagName("input")).GetAttribute("value")),
+                    FirstName = element.FindElements(By.TagName("td"))[2].Text,
+                    LastName = element.FindElements(By.TagName("td"))[1].Text,
+                    Address = element.FindElements(By.TagName("td"))[3].Text,
+                });
+            }
+            return contacts;
+        }
     }
 }

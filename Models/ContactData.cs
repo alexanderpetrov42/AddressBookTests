@@ -6,8 +6,17 @@ using System.Threading.Tasks;
 
 namespace AddressBook
 {
-    public class ContactData
+    public class ContactData : IComparable<ContactData>
     {
+        public ContactData(string firstName)
+        {
+            FirstName = firstName;
+        }
+
+        public ContactData()
+        {
+        }
+
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }
@@ -32,6 +41,24 @@ namespace AddressBook
         public string SecondaryAddress { get; set; }
         public string SecondaryHome { get; set; }
         public string SecondaryNotes { get; set; }
+        public int Id { get; set; }
+
+        int IComparable<ContactData>.CompareTo(ContactData? other)
+        {
+            return Id.CompareTo(other.Id);
+        }
+
+        public override bool Equals(object contact)
+        {
+            var toCompareWith = contact as ContactData;
+            if (toCompareWith == null)
+                return false;
+            return
+                this.Id == toCompareWith.Id &&
+                this.FirstName == toCompareWith.FirstName &&
+                this.LastName == toCompareWith.LastName &&
+                this.Address == toCompareWith.Address;
+        }
     }
 
 }

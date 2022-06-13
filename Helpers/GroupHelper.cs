@@ -29,7 +29,7 @@ namespace AddressBook
             driver.FindElement(GroupPage.Submit).Click();
         }
 
-        protected internal void AssertGroupCreated(GroupData group)
+        protected internal void AssertGroupCreatedOrEdited(GroupData group)
         {
             ClickEditOnLastCreatedGroup();
             Assert.AreEqual(group.Name, GetValueByName("group_name"));
@@ -45,20 +45,22 @@ namespace AddressBook
             return new GroupData(groupName) { Header = header, Footer = footer };
         }
 
-        public void ClickEditOnLastCreatedGroup()
+        public string ClickEditOnLastCreatedGroup()
         {
             driver.FindElement(GroupPage.GroupsTab).Click();
-            SelectLastCreatedGroup();
+            string lastGroupValue = SelectLastCreatedGroup();
             driver.FindElement(GroupPage.Edit).Click();
+            return lastGroupValue;
         }
 
-        protected internal void EditLastCreatedGroup(GroupData group)
+        protected internal string EditLastCreatedGroup(GroupData group)
         {
-            ClickEditOnLastCreatedGroup();
+            string lastGroupValue = ClickEditOnLastCreatedGroup();
             FillTheField(GroupPage.GroupName, group.Name);
             FillTheField(GroupPage.GroupHeader, group.Header);
             FillTheField(GroupPage.GroupFooter, group.Footer);
             driver.FindElement(GroupPage.Update).Click();
+            return lastGroupValue;
         }
 
         protected internal string DeleteLastCreatedGroup()
@@ -89,5 +91,20 @@ namespace AddressBook
             return last_group_value;
         }
 
+        public List<GroupData> GetGroupList()
+        {
+            List<GroupData> groups = new List<GroupData>();
+            manager.Navigation.OpenGroupsPage();
+            ICollection<IWebElement> elements = driver.FindElements(By.CssSelector("span.group"));
+
+            foreach (IWebElement element in elements)
+            {
+                groups.Add(new GroupData(element.Text)
+                {
+                    Id = Int32.Parse(element.FindElement(By.TagName("input")).GetAttribute("value"))
+                }); ;
+            }
+            return groups;
+        }
     }
 }

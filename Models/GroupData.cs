@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AddressBook
 {
-    public class GroupData
+    public class GroupData : IComparable<GroupData>
     {
         public GroupData(string name)
         {
@@ -22,5 +22,22 @@ namespace AddressBook
         public string Header { get; set; }
 
         public string Footer { get; set; }
+
+        public int Id { get; set; }
+
+        int IComparable<GroupData>.CompareTo(GroupData? other)
+        {
+            return Id.CompareTo(other.Id);
+        }
+
+        public override bool Equals(object group)
+        {
+            var toCompareWith = group as GroupData;
+            if (toCompareWith == null)
+                return false;
+            return
+                this.Id == toCompareWith.Id &&
+                this.Name == toCompareWith.Name;
+        }
     }
 }
