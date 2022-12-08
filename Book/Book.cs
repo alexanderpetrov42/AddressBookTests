@@ -26,14 +26,14 @@ books.Add(two_param);
 books.Add(default_children_book);
 books.Add(five_param_children_book);
 
-books.RemoveAt(2); //учитывая нулевой индекс, книгу с третьего места удаляем на втором индексе
+books.RemoveAt(2); 
 books.Insert(2, two_param_children_book);
 Console.WriteLine(books.Count);
 books.Sort();
-Console.WriteLine("Выводим список всех книг: ");
+Console.WriteLine("Printing out book list: ");
 books.ForEach(b => b.Print());
 books.Reverse();
-Console.WriteLine("Выводим список всех книг: ");
+Console.WriteLine("Printing out book list: ");
 books.ForEach(b => b.Print());
 books.Clear();
 
@@ -45,17 +45,17 @@ class Book : IComparable
     private protected int publishingYear { get; set; }
     private protected string printString { get; set; }
 
-    public Book() { author = "Не определено"; bookName = "Не определено"; price = 0.0; publishingYear = 0; }
+    public Book() { author = "Undefined"; bookName = "Undefined"; price = 0.0; publishingYear = 0; }
     public Book(string a, string bn, double p, int py) { author = a; bookName = bn; price = p; publishingYear = py; }
     public Book(string a, int py) { author = a; publishingYear = py; }
 
     ~Book()
     {
-        Console.WriteLine("Запускается деструктор");
+        Console.WriteLine("Launching the destructor");
     }
     public void createPrintString()
     {
-        printString = $"Автор: {author}  Название: {bookName} ";
+        printString = $"Author: {author}  Book name: {bookName} ";
     }
     public virtual void Print()
     {
@@ -66,7 +66,7 @@ class Book : IComparable
     public int CompareTo(object? o)
     {
         if (o is Book book) return bookName.CompareTo(book.bookName);
-        else throw new ArgumentException("Некорректное значение параметра");
+        else throw new ArgumentException("Incorrect parameter name");
     }
 }
 
@@ -74,7 +74,7 @@ class ChildrenBook : Book
 {
     private int minimum_age { get; set; }
 
-    public ChildrenBook() { author = "Не определено"; bookName = "Не определено"; price = 0.0; publishingYear = 0; minimum_age = 0; }
+    public ChildrenBook() { author = "Undefined"; bookName = "Undefined"; price = 0.0; publishingYear = 0; minimum_age = 0; }
 
     public ChildrenBook(string a, int py) { author = a; publishingYear = py; }
 
@@ -82,13 +82,13 @@ class ChildrenBook : Book
 
     ~ChildrenBook()
     {
-        Console.WriteLine("Запускается деструктор");
+        Console.WriteLine("Launching the destructor");
     }
 
     public override void Print()
     {
         createPrintString();
-        printString = printString + $"Минимальный возраст: {minimum_age}";
+        printString = printString + $"Minimum age: {minimum_age}";
         Console.WriteLine(printString);
     }
 }
