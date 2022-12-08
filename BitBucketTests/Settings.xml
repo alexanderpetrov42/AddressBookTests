@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 	<Settings>
 		<BaseURL>https://id.atlassian.com/login?application=bitbucket&amp;continue=https%3A%2F%2Fbitbucket.org%2Faccount%2Fsignin%2F%3FredirectCount%3D1%26next%3D%252F</BaseURL>
-		<Login>ygz50881@yuoia.com</Login>
-		<Password>U]5=+4\!t@w:FjTe</Password>
+		<Login></Login>
+		<Password></Password>
 </Settings>
